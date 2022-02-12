@@ -1,4 +1,6 @@
 defmodule SdvxMusicApi.Music.Track do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -26,7 +28,6 @@ defmodule SdvxMusicApi.Music.Track do
     :level_inf, :level_grv, :level_hvn, :level_vvd,
   ]
 
-  @doc false
   def changeset(track, attrs) do
     track
     |> cast(attrs, @changeset_attrs)
