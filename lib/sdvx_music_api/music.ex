@@ -11,6 +11,19 @@ defmodule SdvxMusicApi.Music do
 		|> Repo.all()
 	end
 
+	def insert_tracks(tracks) do
+		tracks
+		|> Enum.map(&add_timestamp/1)
+		|> Enum.chunk_every(500)
+		|> Enum.each(fn chunk ->
+			Repo.insert_all(
+				Track, chunk,
+				on_conflict: {:replace_all_except, [:inserted_at]},
+				conflict_target: [:id],
+			)
+		end)
+	end
+
 	defp filter_tracks({:level, level}, query) do
 		from t in query,
 			where: t.level_nov == ^level or
@@ -30,19 +43,6 @@ defmodule SdvxMusicApi.Music do
 	end
 
 	defp filter_tracks(_unsupport_filter, query), do: query
-
-	def insert_tracks(tracks) do
-		tracks
-		|> Enum.map(&add_timestamp/1)
-		|> Enum.chunk_every(500)
-		|> Enum.each(fn chunk ->
-			Repo.insert_all(
-				Track, chunk,
-				on_conflict: {:replace_all_except, [:inserted_at]},
-				conflict_target: [:id],
-			)
-		end)
-	end
 
 	defp add_timestamp(track) do
 		now = NaiveDateTime.utc_now()
