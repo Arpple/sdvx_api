@@ -1,5 +1,10 @@
 # SdvxMusicApi
 
+api server for sdvx music database
+
+
+## Setup
+(default Phoenix description)
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
